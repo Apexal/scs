@@ -40,6 +40,11 @@
 
         .subject-code {
             font-weight: bold;
+            font-size: 1.3em;
+        }
+
+        .course-title {
+            font-weight: 600;
         }
     </style>
 </head>
@@ -62,9 +67,12 @@
                         <h1 class="title">Select Courses</h1>
                         <div class="tabs sticky">
                             <ul>
-                                <li :class="{'is-active': selectTerm === '20200502'}" @click="selectTerm = '20200502'"><a>First Term</a></li>
-                                <li :class="{'is-active': selectTerm === '20200503'}" @click="selectTerm = '20200503'"><a>Second Term</a></li>
-                                <li :class="{'is-active': selectTerm === '20200501'}" @click="selectTerm = '20200501'"><a>Full Term</a></li>
+                                <li :class="{'is-active': selectTerm === '20200502'}" @click="selectTerm = '20200502'">
+                                    <a>First Term</a></li>
+                                <li :class="{'is-active': selectTerm === '20200503'}" @click="selectTerm = '20200503'">
+                                    <a>Second Term</a></li>
+                                <li :class="{'is-active': selectTerm === '20200501'}" @click="selectTerm = '20200501'">
+                                    <a>Full Term</a></li>
                             </ul>
                         </div>
                         <div class="field">
@@ -72,20 +80,26 @@
                                 v-model="search">
                         </div>
 
-                        <details class="box animated fadeInLeftBig" v-for="(subjectCourses, subjectCode) in groupedBySubjectCode" :key="subjectCode">
+                        <details class="box animated fadeInLeftBig"
+                            v-for="(subjectCourses, subjectCode) in groupedBySubjectCode" :key="subjectCode">
                             <summary class="subject-code">{{ subjectCode }} <span
                                     class="tag">{{ subjectCourses.length }} courses</span></summary>
 
                             <details v-for="course in subjectCourses">
-                                <summary>{{ course.title }} <span class="tag">{{ course.sections.length }}
+                                <summary><span class="course-title">{{ course.title }}</span> <span
+                                        class="tag">{{ course.sections.length }}
                                         sections</span></summary>
 
-                                <ul>
-                                    <li v-for="section in course.sections" @click="toggleCRN(section.crn)"
+                                <div class="periods">
+
+                                    <div v-for="section in course.sections" @click="toggleCRN(section.crn)"
                                         @mouseover="setHoveredCRN(section.crn)" @mouseleave="hoveredCRN = null"
                                         :class="{ 'has-text-success' : selectedCRNs.includes(section.crn) }">Section
-                                        {{ section.sectionId }} - {{ section.crn }}</li>
-                                </ul>
+                                        {{ section.sectionId }} - {{ section.crn }} -
+                                        {{ section.periods.length ? section.periods[0].instructors.join(', ') : '' }}
+                                    </div>
+
+                                </div>
                             </details>
                         </details>
                     </div>
@@ -94,8 +108,10 @@
                         <div class="sticky">
                             <div class="tabs is-marginless">
                                 <ul>
-                                    <li :class="{'is-active': displayTerm === '20200502'}" @click="displayTerm = '20200502'"><a>First Half</a></li>
-                                    <li :class="{'is-active': displayTerm === '20200503'}" @click="displayTerm = '20200503'"><a>Second Half</a></li>
+                                    <li :class="{'is-active': displayTerm === '20200502'}"
+                                        @click="displayTerm = '20200502'"><a>First Half</a></li>
+                                    <li :class="{'is-active': displayTerm === '20200503'}"
+                                        @click="displayTerm = '20200503'"><a>Second Half</a></li>
                                 </ul>
                             </div>
                             <div id="calendar" ref="calendar" class="animated bounce"></div>
