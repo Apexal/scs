@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         computed: {
             filteredSelectCourses () {
-                return this.courses.filter(course => course.termCode === this.selectTerm)
+                return this.courses.filter(course => course.termCode === this.selectTerm).filter(course => course.title.toLowerCase().includes(this.search.toLowerCase()))
             },
             groupedBySubjectCode() {
                 const grouped = {}
