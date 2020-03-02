@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>SCS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css">
+    <link rel="stylesheet" type="text/css" media="screen"
+        href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/core/main.min.css" />
+    <link rel="stylesheet" type="text/css" media="screen"
+        href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/daygrid/main.min.css" />
+    <link rel="stylesheet" type="text/css" media="screen"
+        href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/timegrid/main.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/core/main.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/daygrid/main.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/timegrid/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="main.js"></script>
+
+    <style>
+        #calendar {
+            position: sticky;
+            top: 10px;
+        }
+        .fc-today {
+            background-color: inherit !important;
+        }
+
+        .fc-time-grid .fc-slats td {
+            height: 2em;
+            border-bottom: 0;
+        }
+
+        .subject-code {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <header class="hero is-small is-primary">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title">SCS</h1>
+                    <h2 class="subtitle">Summer Course Scheduler</h2>
+                </div>
+            </div>
+        </header>
+
+        <main class="section">
+            <div class="container">
+                <div class="columns">
+                    <div class="column">
+                        <h1 class="title">Courses</h1>
+                        <div class="field">
+                            <input type="text" class="input" placeholder="Search courses">
+                        </div>
+                        <details class="box" v-for="(subjectCourses, subjectCode) in groupedBySubjectCode">
+                            <summary class="subject-code">{{ subjectCode }} <span class="tag">{{ subjectCourses.length }} courses</span></summary>
+                            
+                            <details v-for="course in subjectCourses">
+                                <summary>{{ course.title }} <span class="tag">{{ course.sections.length }} sections</span></summary>
+
+                                <ul>
+                                    <li v-for="section in course.sections" @click="toggleCRN(section.crn)" @mouseover="hoveredCRN = section.crn" @mouseleave="hoveredCRN = null" :class="{ 'has-text-success' : selectedCRNs.includes(section.crn) }">Section {{ section.sectionId }} - {{ section.crn }}</li>
+                                </ul>
+                            </details>
+                        </details>
+                    </div>
+                    <div class="column calendar-column">
+                        <span>{{ selectedCRNs }}</span>
+                        <span>{{ hoveredCRN }}</span>
+                        <div id="calendar" ref="calendar"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p class="has-text-centered">Frank Matranga '22</p>
+        </footer>
+    </div>
+</body>
+
+</html>
