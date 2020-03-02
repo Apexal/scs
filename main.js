@@ -47,6 +47,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     }
                 },
+                eventClick: ({event}) => {
+                    console.log(event)
+                    alert(event.extendedProps.crn)
+                },
                 header: {
                     left: '',
                     center: '',
@@ -119,8 +123,9 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             mapPeriodToEvent(period) {
                 return {
+                    ...period,
                     // classNames: ['animated', 'pulse'],
-                    title: period.courseTitle,
+                    title: period.courseTitle + ' ' + period.periodType,
                     daysOfWeek: period.days,
                     startTime: period.startTime,
                     endTime: period.endTime
