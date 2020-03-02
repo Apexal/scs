@@ -49,8 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 },
                 eventClick: ({event}) => {
-                    console.log(event)
-                    alert(event.extendedProps.crn)
+                    this.selectedCRNs = this.selectedCRNs.filter(crn => crn !== event.extendedProps.crn)
                 },
                 header: {
                     left: '',
