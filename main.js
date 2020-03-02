@@ -3,7 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
         el: '#app',
         data: {
             search: '',
-            termCode: '20200501',
+            selectTerm: '20200501',
+            displayTerm: '20200501',
             courses: [],
             selectedCRNs: [],
             hoveredCRN: null,
@@ -18,8 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            const response = await fetch(`/data/${this.termCode}.json`)
-            this.courses = await response.json()
+            await this.getCourses()
 
             this.calendar = new FullCalendar.Calendar(this.$refs.calendar, {
                 plugins: ['dayGrid', 'timeGrid'],
@@ -31,19 +31,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     firstTerm: {
                         text: 'First Term',
                         click: () => {
-                            this.termCode = '20200502'
+                            this.displayTerm = '20200502'
                         }
                     },
                     bothTerms: {
                         text: 'Both Terms',
                         click: () => {
-                            this.termCode = '20200501'
+                            this.displayTerm = '20200501'
                         }
                     },
                     secondTerm: {
                         text: 'Second Term',
                         click: () => {
-                            this.termCode = '20200503'
+                            this.displayTerm = '20200503'
                         }
                     }
                 },
@@ -65,11 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
             this.calendar.render()
         },
         watch: {
-            termCode (newTermCode) {
-                fetch(`/data/${newTermCode}.json`).then(response => {
-                    response.json().then(courses => this.courses = courses)
-                })
-            },
             selectedCRNs() {
                 localStorage.setItem('selectedCRNs', JSON.strngify(this.selectedCRNs))
             },
@@ -80,9 +75,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         },
         computed: {
+            filteredSelectCourses () {
+                return this.courses.filter(course => course.termCode === this.selectTerm)
+            },
             groupedBySubjectCode() {
                 const grouped = {}
-                for (const course of this.courses) {
+                for (const course of this.filteredSelectCourses) {
                     if (!(course.subjectCode in grouped)) {
                         grouped[course.subjectCode] = []
                     }
@@ -112,6 +110,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         },
         methods: {
+            async getJSON(url) {
+                const reponse = await fetch(url)
+                return await reponse.json()
+            },
+            async getCourses () {
+                this.courses = (await this.getJSON('/data/20200502.json')).concat(await this.getJSON('/data/20200503.json')).concat(await this.getJSON('/data/20200501.json'))
+            },
             mapPeriodToEvent(period) {
                 return {
                     title: period.courseTitle,

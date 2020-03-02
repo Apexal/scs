@@ -22,7 +22,7 @@ function determineTimes(startTime, endTime) {
     }
 }
 
-function getPeriods(document) {
+function getPeriods(document, termCode) {
     const rows = document.querySelectorAll('div > div > center table > tbody > tr')
 
     const periods = []
@@ -51,6 +51,7 @@ function getPeriods(document) {
         }
 
         periods.push({
+            termCode,
             crn,
             courseTitle,
             courseSubjectCode,
@@ -73,7 +74,7 @@ function getPeriods(document) {
     return periods
 }
 
-function getCourseFromPeriods(periods) {
+function getCourseFromPeriods(periods, termCode) {
     const courses = []
 
     for (const period of periods) {
@@ -82,6 +83,7 @@ function getCourseFromPeriods(periods) {
         let course = courses.find(c => c.subjectCode === courseSubjectCode && c.number === courseNumber);
         if (!course) {
             course = {
+                termCode,
                 subjectCode: courseSubjectCode,
                 number: courseNumber,
                 title: period.courseTitle,
@@ -109,13 +111,13 @@ function getCourseFromPeriods(periods) {
 async function run(termCode) {
     console.log(`Getting page for ${termCode}...`)
     const dom = await JSDOM.fromURL(`https://sis.rpi.edu/reg/zs${termCode}.htm`)
-    console.log('Parsing HTML...')
-    const periods = getPeriods(dom.window.document)
-    const courses = getCourseFromPeriods(periods)
+    console.log(`Parsing HTML for ${termCode}...`)
+    const periods = getPeriods(dom.window.document, termCode)
+    const courses = getCourseFromPeriods(periods, termCode)
 
-    console.log('Writing to courses.json...')
+    console.log(`Writing to ${termCode}.json...`)
     fs.writeFileSync(path.join(__dirname, 'data/', termCode + '.json'), JSON.stringify(courses))
-    console.log('Done!')
+    console.log(`Done with ${termCode}!`)
 }
 
 run('202001');

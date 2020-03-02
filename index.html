@@ -21,10 +21,13 @@
     <script src="main.js"></script>
 
     <style>
-        #calendar {
+        #calendar, .tabs {
             position: sticky;
             top: 10px;
+            z-index: 2;
+            background-color: white;
         }
+
         .fc-today {
             background-color: inherit !important;
         }
@@ -55,18 +58,32 @@
             <div class="container">
                 <div class="columns">
                     <div class="column">
-                        <h1 class="title">Courses {{ termCode }}</h1>
-                        <div class="field">
-                            <input type="text" class="input" placeholder="Search courses" id="search" name="search" v-model="search">
+                        <h1 class="title">Courses</h1>
+                        <div class="tabs">
+                            <ul>
+                                <li :class="{'is-active': selectTerm === '20200502'}" @click="selectTerm = '20200502'"><a>First Term</a></li>
+                                <li :class="{'is-active': selectTerm === '20200501'}" @click="selectTerm = '20200501'"><a>Second Term</a></li>
+                                <li :class="{'is-active': selectTerm === '20200503'}" @click="selectTerm = '20200503'"><a>Full Term</a></li>
+                            </ul>
                         </div>
+                        <div class="field">
+                            <input type="text" class="input" placeholder="Search courses" id="search" name="search"
+                                v-model="search">
+                        </div>
+
                         <details class="box" v-for="(subjectCourses, subjectCode) in groupedBySubjectCode">
-                            <summary class="subject-code">{{ subjectCode }} <span class="tag">{{ subjectCourses.length }} courses</span></summary>
-                            
+                            <summary class="subject-code">{{ subjectCode }} <span
+                                    class="tag">{{ subjectCourses.length }} courses</span></summary>
+
                             <details v-for="course in subjectCourses">
-                                <summary>{{ course.title }} <span class="tag">{{ course.sections.length }} sections</span></summary>
+                                <summary>{{ course.title }} <span class="tag">{{ course.sections.length }}
+                                        sections</span></summary>
 
                                 <ul>
-                                    <li v-for="section in course.sections" @click="toggleCRN(section.crn)" @mouseover="hoveredCRN = section.crn" @mouseleave="hoveredCRN = null" :class="{ 'has-text-success' : selectedCRNs.includes(section.crn) }">Section {{ section.sectionId }} - {{ section.crn }}</li>
+                                    <li v-for="section in course.sections" @click="toggleCRN(section.crn)"
+                                        @mouseover="hoveredCRN = section.crn" @mouseleave="hoveredCRN = null"
+                                        :class="{ 'has-text-success' : selectedCRNs.includes(section.crn) }">Section
+                                        {{ section.sectionId }} - {{ section.crn }}</li>
                                 </ul>
                             </details>
                         </details>
