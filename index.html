@@ -48,8 +48,15 @@
             font-weight: 600;
         }
 
-        .subject-code, .pin-subject-code {
+        .subject-code,
+        .course-title,
+        .pin-subject-code {
             cursor: pointer;
+        }
+
+        .selected {
+            border-left: 5px solid rgb(35, 179, 35);
+            padding-left: 10px;
         }
     </style>
 </head>
@@ -86,28 +93,33 @@
                         </div>
 
                         <details class="box animated fadeInLeftBig"
+                            :class="{ 'is-active': pinnedSubjectCodes.includes(subjectCode) }"
                             v-for="(subjectCourses, subjectCode) in groupedBySubjectCode" :key="subjectCode">
                             <summary>
                                 <span class="subject-code">{{ subjectCode }}</span>
-                                <span class="icon is-pulled-right pin-subject-code" :class="{'has-text-success': pinnedSubjectCodes.includes(subjectCode)}" @click.prevent="togglePinSubjectCode(subjectCode)">
+                                <span class="icon is-pulled-right pin-subject-code"
+                                    :class="{'has-text-success': pinnedSubjectCodes.includes(subjectCode)}"
+                                    @click.prevent="togglePinSubjectCode(subjectCode)">
                                     <i class="fas fa-thumbtack"></i>
                                 </span>
-                                <span
-                                    class="tag">{{ subjectCourses.length }} courses</span>
-                                </summary>
+                                <span class="tag">{{ subjectCourses.length }} courses</span>
+                            </summary>
 
                             <details v-for="course in subjectCourses">
-                                <summary><span class="course-title">{{ course.title }}</span> <span
-                                        class="tag">{{ course.sections.length }}
-                                        sections</span></summary>
+                                <summary>
+                                    <span class="course-title">{{ course.title }}</span>
+                                    <span class="tag">{{ course.sections.length }}
+                                        sections</span>
+                                </summary>
 
                                 <div class="periods">
 
                                     <div v-for="section in course.sections" @click="toggleCRN(section.crn)"
                                         @mouseover="setHoveredCRN(section.crn)" @mouseleave="hoveredCRN = null"
-                                        :class="{ 'has-text-success' : selectedCRNs.includes(section.crn) }">Section
+                                        :class="{ 'selected' : selectedCRNs.includes(section.crn) }"
+                                        style="cursor: copy;">Section
                                         {{ section.sectionId }} - {{ section.crn }} -
-                                        {{ section.periods.length ? section.periods[0].instructors.join(', ') : '' }}
+                                        {{ section.instructors.join(', ') }} - {{ section.credits }} credits
                                     </div>
 
                                 </div>
