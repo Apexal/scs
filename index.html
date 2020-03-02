@@ -21,7 +21,7 @@
     <script src="main.js"></script>
 
     <style>
-        #calendar, .tabs {
+        .sticky {
             position: sticky;
             top: 10px;
             z-index: 2;
@@ -57,13 +57,13 @@
         <main class="section">
             <div class="container">
                 <div class="columns">
-                    <div class="column">
-                        <h1 class="title">Courses</h1>
-                        <div class="tabs">
+                    <div class="column is-5">
+                        <h1 class="title">Select Courses</h1>
+                        <div class="tabs sticky">
                             <ul>
                                 <li :class="{'is-active': selectTerm === '20200502'}" @click="selectTerm = '20200502'"><a>First Term</a></li>
-                                <li :class="{'is-active': selectTerm === '20200501'}" @click="selectTerm = '20200501'"><a>Second Term</a></li>
-                                <li :class="{'is-active': selectTerm === '20200503'}" @click="selectTerm = '20200503'"><a>Full Term</a></li>
+                                <li :class="{'is-active': selectTerm === '20200503'}" @click="selectTerm = '20200503'"><a>Second Term</a></li>
+                                <li :class="{'is-active': selectTerm === '20200501'}" @click="selectTerm = '20200501'"><a>Full Term</a></li>
                             </ul>
                         </div>
                         <div class="field">
@@ -89,7 +89,16 @@
                         </details>
                     </div>
                     <div class="column calendar-column">
-                        <div id="calendar" ref="calendar"></div>
+                        <h1 class="title">View Schedule</h1>
+                        <div class="sticky">
+                            <div class="tabs">
+                                <ul>
+                                    <li :class="{'is-active': displayTerm === '20200502'}" @click="displayTerm = '20200502'"><a>First Half</a></li>
+                                    <li :class="{'is-active': displayTerm === '20200503'}" @click="displayTerm = '20200503'"><a>Second Half</a></li>
+                                </ul>
+                            </div>
+                            <div id="calendar" ref="calendar"></div>
+                        </div>
                     </div>
                 </div>
             </div>

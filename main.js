@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 header: {
                     left: '',
-                    center: 'firstTerm,bothTerms,secondTerm',
+                    center: '',
                     right: ''
                 },
                 color: 'green',
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         watch: {
             selectedCRNs() {
-                localStorage.setItem('selectedCRNs', JSON.strngify(this.selectedCRNs))
+                localStorage.setItem('selectedCRNs', JSON.stringify(this.selectedCRNs))
             },
             courseEvents(newEvents) {
                 if (this.calendar) {
@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }))
             },
             courseEvents() {
-                return this.selectedSections.map(section => section.periods).flat().map(this.mapPeriodToEvent).concat(this.hoveredSectionEvents)
+                return this.selectedSections.map(section => section.periods).flat().filter(period => period.termCode === this.displayTerm || period.termCode === '20200501').map(this.mapPeriodToEvent).concat(this.hoveredSectionEvents)
             }
         },
         methods: {
