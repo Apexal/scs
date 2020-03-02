@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
     <link rel="stylesheet" type="text/css" media="screen" href="main.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/js/all.min.js"></script>
     <link rel="stylesheet" type="text/css" media="screen"
         href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/core/main.min.css" />
     <link rel="stylesheet" type="text/css" media="screen"
@@ -46,6 +47,10 @@
         .course-title {
             font-weight: 600;
         }
+
+        .pin-subject-code {
+            cursor: pointer;
+        }
     </style>
 </head>
 
@@ -82,8 +87,14 @@
 
                         <details class="box animated fadeInLeftBig"
                             v-for="(subjectCourses, subjectCode) in groupedBySubjectCode" :key="subjectCode">
-                            <summary class="subject-code">{{ subjectCode }} <span
-                                    class="tag">{{ subjectCourses.length }} courses</span></summary>
+                            <summary>
+                                <span class="subject-code">{{ subjectCode }}</span>
+                                <span class="icon is-pulled-right pin-subject-code" :class="{'has-text-success': pinnedSubjectCodes.includes(subjectCode)}" @click.prevent="togglePinSubjectCode(subjectCode)">
+                                    <i class="fas fa-thumbtack"></i>
+                                </span>
+                                <span
+                                    class="tag">{{ subjectCourses.length }} courses</span>
+                                </summary>
 
                             <details v-for="course in subjectCourses">
                                 <summary><span class="course-title">{{ course.title }}</span> <span

@@ -8,7 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
             courses: [],
             selectedCRNs: [],
             hoveredCRN: null,
-            calendar: null
+            pinnedSubjectCodes: [],
+            calendar: null,
         },
         async mounted() {
             if (localStorage.getItem('selectedCRNs') !== null) {
@@ -120,6 +121,13 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             async getCourses () {
                 this.courses = (await this.getJSON('data/20200502.json')).concat(await this.getJSON('data/20200503.json')).concat(await this.getJSON('data/20200501.json'))
+            },
+            togglePinSubjectCode(subjectCode) {
+                if (this.pinnedSubjectCodes.includes(subjectCode)) {
+                    this.pinnedSubjectCodes = this.pinnedSubjectCodes.filter(sc => sc !== subjectCode)
+                } else {
+                    this.pinnedSubjectCodes.push(subjectCode)
+                }
             },
             mapPeriodToEvent(period) {
                 return {
