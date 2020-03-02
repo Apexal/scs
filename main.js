@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return await reponse.json()
             },
             async getCourses () {
-                this.courses = (await this.getJSON('/data/20200502.json')).concat(await this.getJSON('/data/20200503.json')).concat(await this.getJSON('/data/20200501.json'))
+                this.courses = (await this.getJSON('data/20200502.json')).concat(await this.getJSON('data/20200503.json')).concat(await this.getJSON('data/20200501.json'))
             },
             mapPeriodToEvent(period) {
                 return {
