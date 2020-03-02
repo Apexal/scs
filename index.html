@@ -55,9 +55,9 @@
             <div class="container">
                 <div class="columns">
                     <div class="column">
-                        <h1 class="title">Courses</h1>
+                        <h1 class="title">Courses {{ termCode }}</h1>
                         <div class="field">
-                            <input type="text" class="input" placeholder="Search courses">
+                            <input type="text" class="input" placeholder="Search courses" id="search" name="search" v-model="search">
                         </div>
                         <details class="box" v-for="(subjectCourses, subjectCode) in groupedBySubjectCode">
                             <summary class="subject-code">{{ subjectCode }} <span class="tag">{{ subjectCourses.length }} courses</span></summary>
@@ -72,8 +72,6 @@
                         </details>
                     </div>
                     <div class="column calendar-column">
-                        <span>{{ selectedCRNs }}</span>
-                        <span>{{ hoveredCRN }}</span>
                         <div id="calendar" ref="calendar"></div>
                     </div>
                 </div>

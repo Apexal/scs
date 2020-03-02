@@ -106,16 +106,19 @@ function getCourseFromPeriods(periods) {
     return courses
 }
 
-async function run() {
-    console.log('Getting page...')
-    const dom = await JSDOM.fromURL(`https://sis.rpi.edu/reg/zs202001.htm`)
+async function run(termCode) {
+    console.log(`Getting page for ${termCode}...`)
+    const dom = await JSDOM.fromURL(`https://sis.rpi.edu/reg/zs${termCode}.htm`)
     console.log('Parsing HTML...')
     const periods = getPeriods(dom.window.document)
     const courses = getCourseFromPeriods(periods)
 
     console.log('Writing to courses.json...')
-    fs.writeFileSync(path.join(__dirname, 'courses.json'), JSON.stringify(courses))
+    fs.writeFileSync(path.join(__dirname, 'data/', termCode + '.json'), JSON.stringify(courses))
     console.log('Done!')
 }
 
-run();
+run('202001');
+run('20200501');
+run('20200502');
+run('20200503');
