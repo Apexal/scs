@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>SCS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
     <link rel="stylesheet" type="text/css" media="screen" href="main.css">
     <link rel="stylesheet" type="text/css" media="screen"
@@ -71,7 +72,7 @@
                                 v-model="search">
                         </div>
 
-                        <details class="box" v-for="(subjectCourses, subjectCode) in groupedBySubjectCode">
+                        <details class="box animated fadeInLeftBig" v-for="(subjectCourses, subjectCode) in groupedBySubjectCode" :key="subjectCode">
                             <summary class="subject-code">{{ subjectCode }} <span
                                     class="tag">{{ subjectCourses.length }} courses</span></summary>
 
@@ -81,7 +82,7 @@
 
                                 <ul>
                                     <li v-for="section in course.sections" @click="toggleCRN(section.crn)"
-                                        @mouseover="hoveredCRN = section.crn" @mouseleave="hoveredCRN = null"
+                                        @mouseover="setHoveredCRN(section.crn)" @mouseleave="hoveredCRN = null"
                                         :class="{ 'has-text-success' : selectedCRNs.includes(section.crn) }">Section
                                         {{ section.sectionId }} - {{ section.crn }}</li>
                                 </ul>
@@ -91,7 +92,7 @@
                     <div class="column calendar-column">
                         <h1 class="title">View Schedule</h1>
                         <div class="sticky">
-                            <div class="tabs">
+                            <div class="tabs is-marginless">
                                 <ul>
                                     <li :class="{'is-active': displayTerm === '20200502'}" @click="displayTerm = '20200502'"><a>First Half</a></li>
                                     <li :class="{'is-active': displayTerm === '20200503'}" @click="displayTerm = '20200503'"><a>Second Half</a></li>

@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 slotDuration: '01:00:00',
                 allDaySlot: false,
                 minTime: '08:00:00',
-                maxTime: '20:00:00',
+                maxTime: '22:00:00',
                 height: '100%',
                 events: (info, successCallback) => successCallback(this.courseEvents)
             })
@@ -119,11 +119,15 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             mapPeriodToEvent(period) {
                 return {
+                    // classNames: ['animated', 'pulse'],
                     title: period.courseTitle,
                     daysOfWeek: period.days,
                     startTime: period.startTime,
                     endTime: period.endTime
                 }
+            },
+            setHoveredCRN(crn) {
+                if (!(this.selectedCRNs.includes(crn))) this.hoveredCRN = crn
             },
             toggleCRN(crn) {
                 if (this.selectedCRNs.includes(crn)) {
@@ -131,6 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         this.selectedCRNs.filter(selectedCrn => selectedCrn !== crn)
                 } else {
                     this.selectedCRNs.push(crn)
+                    this.hoveredCRN = null
                 }
             }
         }
