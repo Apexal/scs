@@ -99,7 +99,7 @@
                         <details class="box animated fadeInLeftBig"
                             v-for="(subjectCourses, subjectCode) in groupedBySubjectCode" :key="subjectCode">
                             <summary>
-                                <span class="subject-code">{{ subjectCode }}</span>
+                                <span class="subject-code">{{ subjectCode }} - {{ subjectCodeDisplay(subjectCode) }}</span>
                                 <span class="tag">{{ subjectCourses.length }} courses</span>
                             </summary>
 

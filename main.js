@@ -121,6 +121,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         },
         methods: {
+            subjectCodeDisplay(subjectCode) {
+                return {
+                    'ARCH': 'Architecture',
+                    'BIOL': 'Biology',
+                    'CSCI': 'Computer Science'
+                }[subjectCode]
+            },
             periodTypeDisplay(t) {
                 return {
                     'LEC': 'Lecture',
