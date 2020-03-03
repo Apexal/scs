@@ -1,3 +1,12 @@
+// const copyToClipboard = str => {
+//     const el = document.createElement('textarea');
+//     el.value = str;
+//     document.body.appendChild(el);
+//     el.select();
+//     document.execCommand('copy');
+//     document.body.removeChild(el);
+// }
+
 document.addEventListener('DOMContentLoaded', () => {
     const app = new Vue({
         el: '#app',
@@ -49,7 +58,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 },
                 eventClick: ({ event }) => {
-                    this.selectedCRNs = this.selectedCRNs.filter(crn => crn !== event.extendedProps.crn)
+                    this.selectTerm = event.extendedProps.termCode
+                    this.$nextTick(() => {
+                        const el = document.getElementById(event.extendedProps.courseSubjectCode)
+                        el.scrollIntoView(true)
+                        el.open = true
+
+                        const el2 = document.getElementById(event.extendedProps.courseSubjectCode + '-' + event.extendedProps.courseNumber)
+                        el2.open = true
+                    })
+                    // this.selectedCRNs = this.selectedCRNs.filter(crn => crn !== event.extendedProps.crn)
                 },
                 header: {
                     left: '',
@@ -98,6 +116,9 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             selectedCourseSubjectCodes() {
                 return Array.from(new Set(this.selectedSections.map(section => section.courseSubjectCode)))
+            },
+            subjectCodes() {
+                return [...new Set(this.selectedCourseSubjectCodes.concat(this.filteredSelectCourses.map(course => course.subjectCode).filter(subjectCode => !this.selectedCourseSubjectCodes.includes(subjectCode))))]
             },
             hoveredSection() {
                 if (this.hoveredCRN === null) return null

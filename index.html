@@ -23,14 +23,19 @@
     <script src="main.js"></script>
 
     <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
         :root {
             --first-term: #00b9d1;
             --second-term: #00d181;
             --full-term: #00d1b2;
         }
+
         .sticky {
             position: sticky;
-            top: 10px;
+            top: 0;
             z-index: 2;
             background-color: white;
         }
@@ -61,6 +66,10 @@
         .selected {
             border-left: 5px solid rgb(35, 179, 35);
             padding-left: 10px;
+        }
+
+        .subject {
+            transition: transform 1s;
         }
     </style>
 </head>
@@ -95,15 +104,16 @@
                             <input type="text" class="input" placeholder="Search courses" id="search" name="search"
                                 v-model="search">
                         </div>
-
-                        <details class="box animated fadeInLeftBig"
-                            v-for="(subjectCourses, subjectCode) in groupedBySubjectCode" :key="subjectCode">
+                        <details :id="subjectCode" class="box animated slideInLeftBig subject"
+                            v-for="(subjectCourses, subjectCode) in groupedBySubjectCode" :key="subjectCode"
+                            :key="subjectCode">
                             <summary>
-                                <span class="subject-code">{{ subjectCode }} - {{ subjectCodeDisplay(subjectCode) }}</span>
+                                <span class="subject-code">{{ subjectCode }} -
+                                    {{ subjectCodeDisplay(subjectCode) }}</span>
                                 <span class="tag">{{ subjectCourses.length }} courses</span>
                             </summary>
 
-                            <details v-for="course in subjectCourses">
+                            <details :id="course.subjectCode + '-' + course.number" v-for="course in subjectCourses">
                                 <summary>
                                     <span class="course-title">{{ course.title }}</span>
                                     <span class="tag">{{ course.sections.length }}
@@ -111,7 +121,6 @@
                                 </summary>
 
                                 <div class="periods">
-
                                     <div v-for="section in course.sections" @click="toggleCRN(section.crn)"
                                         @mouseover="setHoveredCRN(section.crn)" @mouseleave="hoveredCRN = null"
                                         :class="{ 'selected' : selectedCRNs.includes(section.crn) }"
@@ -119,7 +128,6 @@
                                         {{ section.sectionId }} - {{ section.crn }} -
                                         {{ section.instructors.join(', ') }} - {{ section.credits }} credits
                                     </div>
-
                                 </div>
                             </details>
                         </details>
@@ -133,7 +141,8 @@
                         <div class="sticky">
                             <div class="tabs is-marginless">
                                 <ul>
-                                    <li :class="{'is-active': displayTerm === 'full'}" @click="displayTerm = 'full'"><a>Full</a></li>
+                                    <li :class="{'is-active': displayTerm === 'full'}" @click="displayTerm = 'full'">
+                                        <a>Full</a></li>
                                     <li :class="{'is-active': displayTerm === '20200502'}"
                                         @click="displayTerm = '20200502'"><a>Only First Half</a></li>
                                     <li :class="{'is-active': displayTerm === '20200503'}"
