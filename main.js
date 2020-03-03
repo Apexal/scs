@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     }
                 },
-                eventClick: ({event}) => {
+                eventClick: ({ event }) => {
                     this.selectedCRNs = this.selectedCRNs.filter(crn => crn !== event.extendedProps.crn)
                 },
                 header: {
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         },
         computed: {
-            filteredSelectCourses () {
+            filteredSelectCourses() {
                 return this.courses.filter(course => course.termCode === this.selectTerm).filter(course => course.title.toLowerCase().includes(this.search.toLowerCase()))
             },
             groupedBySubjectCode() {
@@ -121,11 +121,19 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         },
         methods: {
+            periodTypeDisplay(t) {
+                return {
+                    'LEC': 'Lecture',
+                    'STU': 'Studio',
+                    'TES': 'Test',
+                    'REC': 'Recitation'
+                }[t] || t
+            },
             async getJSON(url) {
                 const reponse = await fetch(url)
                 return await reponse.json()
             },
-            async getCourses () {
+            async getCourses() {
                 this.courses = (await this.getJSON('data/20200502.json')).concat(await this.getJSON('data/20200503.json')).concat(await this.getJSON('data/20200501.json'))
             },
             togglePinSubjectCode(subjectCode) {
@@ -152,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     ...period,
                     color,
                     // classNames: ['animated', 'pulse'],
-                    title: period.courseTitle + ' ' + period.periodType,
+                    title: period.courseTitle + ' ' + this.periodTypeDisplay(period.periodType),
                     daysOfWeek: period.days,
                     startTime: period.startTime,
                     endTime: period.endTime
