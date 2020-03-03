@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
         data: {
             search: '',
             selectTerm: '20200501',
-            displayTerm: '20200501',
+            displayTerm: 'full',
             courses: [],
             selectedCRNs: [],
             hoveredCRN: null,
@@ -56,7 +56,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     center: '',
                     right: ''
                 },
-                color: 'green',
                 weekends: false,
                 slotDuration: '01:00:00',
                 allDaySlot: false,
@@ -97,6 +96,9 @@ document.addEventListener('DOMContentLoaded', () => {
             selectedSections() {
                 return this.courses.map(course => course.sections).flat().filter(section => this.selectedCRNs.includes(section.crn))
             },
+            selectedCourseSubjectCodes() {
+                return Array.from(new Set(this.selectedSections.map(section => section.courseSubjectCode)))
+            },
             hoveredSection() {
                 if (this.hoveredCRN === null) return null
 
@@ -110,7 +112,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 }))
             },
             courseEvents() {
-                return this.selectedSections.map(section => section.periods).flat().filter(period => period.termCode === this.displayTerm || period.termCode === '20200501').map(this.mapPeriodToEvent).concat(this.hoveredSectionEvents)
+                if (this.displayTerm === 'full') {
+                    return this.selectedSections.map(section => section.periods).flat().map(this.mapPeriodToEvent).concat(this.hoveredSectionEvents)
+
+                } else {
+                    return this.selectedSections.map(section => section.periods).flat().filter(period => period.termCode === this.displayTerm || period.termCode === '20200501').map(this.mapPeriodToEvent).concat(this.hoveredSectionEvents)
+                }
             }
         },
         methods: {
@@ -129,8 +136,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             },
             mapPeriodToEvent(period) {
+                let color
+                switch (period.termCode) {
+                    case '20200501':
+                        color = 'var(--full-term)'
+                        break
+                    case '20200502':
+                        color = 'var(--first-term)'
+                        break
+                    default:
+                        color = 'var(--second-term)'
+                        break
+                }
                 return {
                     ...period,
+                    color,
                     // classNames: ['animated', 'pulse'],
                     title: period.courseTitle + ' ' + period.periodType,
                     daysOfWeek: period.days,

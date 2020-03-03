@@ -97,6 +97,9 @@ function getCourseFromPeriods(periods, termCode) {
             section = {
                 crn: crn,
                 sectionId: sectionId,
+                courseTitle: period.courseTitle,
+                courseSubjectCode: period.courseSubjectCode,
+                courseNumber: period.courseNumber,
                 credits: period.credits,
                 instructors: period.instructors,
                 periods: []

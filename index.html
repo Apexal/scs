@@ -23,6 +23,11 @@
     <script src="main.js"></script>
 
     <style>
+        :root {
+            --first-term: #00a7d1;
+            --second-term: #00d181;
+            --full-term: #00d1b2;
+        }
         .sticky {
             position: sticky;
             top: 10px;
@@ -49,8 +54,7 @@
         }
 
         .subject-code,
-        .course-title,
-        .pin-subject-code {
+        .course-title {
             cursor: pointer;
         }
 
@@ -93,15 +97,9 @@
                         </div>
 
                         <details class="box animated fadeInLeftBig"
-                            :class="{ 'is-active': pinnedSubjectCodes.includes(subjectCode) }"
                             v-for="(subjectCourses, subjectCode) in groupedBySubjectCode" :key="subjectCode">
                             <summary>
                                 <span class="subject-code">{{ subjectCode }}</span>
-                                <span class="icon is-pulled-right pin-subject-code"
-                                    :class="{'has-text-success': pinnedSubjectCodes.includes(subjectCode)}"
-                                    @click.prevent="togglePinSubjectCode(subjectCode)">
-                                    <i class="fas fa-thumbtack"></i>
-                                </span>
                                 <span class="tag">{{ subjectCourses.length }} courses</span>
                             </summary>
 
@@ -128,14 +126,21 @@
                     </div>
                     <div class="column calendar-column">
                         <h1 class="title">View Schedule</h1>
+                        <p>{{ selectedCRNs }}</p>
                         <div class="sticky">
                             <div class="tabs is-marginless">
                                 <ul>
+                                    <li :class="{'is-active': displayTerm === 'full'}" @click="displayTerm = 'full'"><a>Full</a></li>
                                     <li :class="{'is-active': displayTerm === '20200502'}"
-                                        @click="displayTerm = '20200502'"><a>First Half</a></li>
+                                        @click="displayTerm = '20200502'"><a>Only First Half</a></li>
                                     <li :class="{'is-active': displayTerm === '20200503'}"
-                                        @click="displayTerm = '20200503'"><a>Second Half</a></li>
+                                        @click="displayTerm = '20200503'"><a>Only Second Half</a></li>
                                 </ul>
+                            </div>
+                            <div v-if="displayTerm === 'full'" class="tags is-marginless">
+                                <span class="tag is-primary">First Term</span>
+                                <span class="tag is-primary">Second Term</span>
+                                <span class="tag is-primary">Full Term</span>
                             </div>
                             <div id="calendar" ref="calendar" class="animated bounce"></div>
                         </div>
