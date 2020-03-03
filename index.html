@@ -24,7 +24,7 @@
 
     <style>
         :root {
-            --first-term: #00a7d1;
+            --first-term: #00b9d1;
             --second-term: #00d181;
             --full-term: #00d1b2;
         }
@@ -126,7 +126,10 @@
                     </div>
                     <div class="column calendar-column">
                         <h1 class="title">View Schedule</h1>
-                        <p>{{ selectedCRNs }}</p>
+                        <div class="tags">
+                            <label class="label">CRNs:</label>
+                            <span class="tag is-primary" v-for="crn in selectedCRNs">{{ crn }}</span>
+                        </div>
                         <div class="sticky">
                             <div class="tabs is-marginless">
                                 <ul>
